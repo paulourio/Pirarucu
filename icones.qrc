@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="teste">
+    <file>Pictograms-nps-accessibility-braille-2.svg</file>
+    <file>3976.png</file>
+    <file>3974.png</file>
+    <file>3962.png</file>
+    <file>3965.png</file>
+    <file>3967.png</file>
+    <file>3964.png</file>
+    <file>3977.png</file>
+  </qresource>
+</RCC>
