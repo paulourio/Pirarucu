@@ -1,0 +1,5 @@
+Para executar (python 3):
+
+$ make
+$ python pirarucu.py
+

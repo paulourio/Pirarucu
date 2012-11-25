@@ -8,9 +8,9 @@ class TemposWindow(QDialog, Ui_TemposWindow):
 		QDialog.__init__(self, parent)
 		self.setupUi(self)
 		
-		x = (QApplication.desktop().width() - self.width()) * .5
-		y = (QApplication.desktop().height() - self.height()) * .5
-		self.move(x, y)
+		#x = (QApplication.desktop().width() - self.width()) * .5
+		#y = (QApplication.desktop().height() - self.height()) * .5
+		#self.move(x, y)
 		
 		self.connect(self.hsCelulaAtiva, SIGNAL('valueChanged(int)'), self.hsCelulaAtivaChange)
 		self.connect(self.hsPalavra, SIGNAL('valueChanged(int)'), self.hsPalavraChange)

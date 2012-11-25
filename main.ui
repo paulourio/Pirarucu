@@ -85,7 +85,7 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="2">
+     <item row="0" column="1">
       <widget class="QLabel" name="lbLetraAtual">
        <property name="font">
         <font>
@@ -106,38 +106,19 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QPushButton" name="btPalavraAnterior">
-       <property name="maximumSize">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
         <size>
-         <width>30</width>
-         <height>25</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
-       <property name="focusPolicy">
-        <enum>Qt::WheelFocus</enum>
-       </property>
-       <property name="toolTip">
-        <string>Voltar uma palavra</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="icones.qrc">
-         <normaloff>:/teste/3974.png</normaloff>:/teste/3974.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>24</width>
-         <height>24</height>
-        </size>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
+      </spacer>
      </item>
-     <item row="0" column="3">
+     <item row="0" column="2">
       <layout class="QGridLayout" name="gridLayout_6">
        <property name="leftMargin">
         <number>5</number>
@@ -237,19 +218,6 @@
        </item>
       </layout>
      </item>
-     <item row="0" column="1">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget_2">
@@ -282,38 +250,6 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QPushButton" name="btPalavraProxima">
-       <property name="maximumSize">
-        <size>
-         <width>30</width>
-         <height>25</height>
-        </size>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::WheelFocus</enum>
-       </property>
-       <property name="toolTip">
-        <string>Próxima palavra</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="icones.qrc">
-         <normaloff>:/teste/3976.png</normaloff>:/teste/3976.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>24</height>
-        </size>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -630,35 +566,6 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_5">
-     <item row="0" column="2">
-      <widget class="QPushButton" name="btParar">
-       <property name="maximumSize">
-        <size>
-         <width>30</width>
-         <height>25</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Interromper leitura e voltar ao início</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="icones.qrc">
-         <normaloff>:/teste/3977.png</normaloff>:/teste/3977.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>24</width>
-         <height>24</height>
-        </size>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="btIniciar">
        <property name="maximumSize">
@@ -689,7 +596,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QPushButton" name="btPausar">
+      <widget class="QPushButton" name="btParar">
        <property name="maximumSize">
         <size>
          <width>30</width>
@@ -697,14 +604,14 @@ p, li { white-space: pre-wrap; }
         </size>
        </property>
        <property name="toolTip">
-        <string>Pausar leitura</string>
+        <string>Interromper leitura e voltar ao início</string>
        </property>
        <property name="text">
         <string/>
        </property>
        <property name="icon">
         <iconset resource="icones.qrc">
-         <normaloff>:/teste/3964.png</normaloff>:/teste/3964.png</iconset>
+         <normaloff>:/teste/3977.png</normaloff>:/teste/3977.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -717,7 +624,7 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item row="0" column="2">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -760,10 +667,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>btAjusteTempo</tabstop>
   <tabstop>texto</tabstop>
   <tabstop>btIniciar</tabstop>
-  <tabstop>btPausar</tabstop>
   <tabstop>btParar</tabstop>
-  <tabstop>btPalavraAnterior</tabstop>
-  <tabstop>btPalavraProxima</tabstop>
  </tabstops>
  <resources>
   <include location="icones.qrc"/>

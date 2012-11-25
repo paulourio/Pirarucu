@@ -26,6 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 		self.connect(self.btIniciar, SIGNAL('clicked()'), self.btIniciarClicked)
 		self.connect(self.btParar, SIGNAL('clicked()'), self.btPararClicked)
 		self.connect(self.lbLetraProxima, SIGNAL('update(QString)'), self.lbLetraProximaUpdate)
+		self.connect(self.texto, SIGNAL('update(QString)'), self.TextoUpdate)
 		
 		self.connect(self.led1, SIGNAL('update(QString)'), self.LedAtualUpdate)
 		self.connect(self.pled1, SIGNAL('update(QString)'), self.LedProximoUpdate)
@@ -95,3 +96,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 			
 	def lbLetraProximaUpdate(self, texto):
 		self.lbLetraProxima.setText(texto)
+
+	def TextoUpdate(self, texto):
+		self.texto.setHtml(texto)
+		
+	def AtualizarDestaqueTexto(self, novo):
+		self.texto.emit(SIGNAL('update(QString)'), novo)
