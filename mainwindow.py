@@ -6,9 +6,11 @@ from temposwindow import TemposWindow
 from reader_thread import ReaderThread
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-	def __init__(self, parent=None):
+	def __init__(self, app, parent=None):
 		QMainWindow.__init__(self, parent)
 		self.setupUi(self)
+		
+		self.app = app
 		
 		#x = (QApplication.desktop().width() - self.width()) * .5
 		#y = (QApplication.desktop().height() - self.height()) * .5
@@ -21,12 +23,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 		self.tempo_palavras = 60
 		self.tempo_sentencas = 70
 		
-		self.texto.setText('Paulo Roberto Urio. Nasci em 1984.')
+		self.texto.setText('Louis Braille nasceu em Coupvray (em França) em 1809. Ele perdeu a visão aos três anos. Quatro anos depois, ele ingressou no Instituto de Cegos de Paris. Em 1827, então com dezoito anos, tornou-se professor desse instituto. Ao ouvir falar de um sistema de pontos e buracos inventado por um oficial para ler mensagens durante a noite em lugares onde seria perigoso acender a luz, ele fez algumas adaptações no sistema de pontos em alto relevo.')
 		
 		self.connect(self.btIniciar, SIGNAL('clicked()'), self.btIniciarClicked)
 		self.connect(self.btParar, SIGNAL('clicked()'), self.btPararClicked)
+		self.connect(self.lbLetraAtual, SIGNAL('update(QString)'), self.lbLetraAtualUpdate)
 		self.connect(self.lbLetraProxima, SIGNAL('update(QString)'), self.lbLetraProximaUpdate)
 		self.connect(self.texto, SIGNAL('update(QString)'), self.TextoUpdate)
+		self.connect(self.lbBraille, SIGNAL('update(QString)'), self.lbBrailleUpdate)
+		self.connect(self.statusBar, SIGNAL('update(QString)'), self.statusBarUpdate)
 		
 		self.connect(self.led1, SIGNAL('update(QString)'), self.LedAtualUpdate)
 		self.connect(self.pled1, SIGNAL('update(QString)'), self.LedProximoUpdate)
@@ -48,25 +53,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 			self.IniciarLeitura(conteudo)
 			
 	def btPararClicked(self):
-		if self.reader:
+		if hasattr(self, 'reader'):
 			self.reader.stop()
 
 	def IniciarLeitura(self, conteudo):
 		self.reader = ReaderThread(conteudo, self)
 		self.reader.start()
+		
+	def statusBarUpdate(self, texto):
+		self.statusBar.message(texto)		
 	
 	def AtualizarLeds(self, atual, proxima):
 		if atual[0] is not None:
-			self.lbLetraAtual.setText(atual[0].upper())
+			self.lbLetraAtual.emit(SIGNAL('update(QString)'), atual[0].upper())
 		else:
-			self.lbLetraAtual.clear()			
+			self.lbLetraAtual.emit(SIGNAL('update(QString)'), '')
 		self.AtualizarLedsAtual(atual[2])			
-		self.statusBar.message('Atual: ' + atual[3])
+		self.statusBar.emit(SIGNAL('update(QString)'), 'Atual: ' + atual[3])
 		if proxima[0] is not None:
 			self.lbLetraProxima.emit(SIGNAL('update(QString)'), '<html><head/><body><p><span style=" color:#808080;">' + proxima[0].upper() + '</span></p></body></html>')
 		else:
-			self.lbLetraProxima.clear()
+			self.lbLetraProxima.emit(SIGNAL('update(QString)'), '')
 		self.AtualizarLedsProximo(proxima[2])
+		self.app.processEvents()
 		
 	def AtualizarLedsAtual(self, bits):
 		if not bits:
@@ -92,13 +101,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 		self.pled3.setState(bits[2] == '1')
 		self.pled4.setState(bits[3] == '1')
 		self.pled5.setState(bits[4] == '1')
-		self.pled6.setState(bits[5] == '1')			
+		self.pled6.setState(bits[5] == '1')	
+		
+	def lbLetraAtualUpdate(self, texto):
+		self.lbLetraAtual.setText(texto)
 			
 	def lbLetraProximaUpdate(self, texto):
 		self.lbLetraProxima.setText(texto)
 
 	def TextoUpdate(self, texto):
 		self.texto.setHtml(texto)
+		print('== Destaque atualizado')
+	
+	def lbBrailleUpdate(self, texto):
+		self.lbBraille.setText(texto)
+		
+	def AtualizarTextoBraille(self, texto):
+		self.lbBraille.emit(SIGNAL('update(QString)'), texto)
+		self.app.processEvents()
 		
 	def AtualizarDestaqueTexto(self, novo):
 		self.texto.emit(SIGNAL('update(QString)'), novo)
+		self.app.processEvents()

@@ -31,7 +31,11 @@ class Tradutor(object):
 		for l in palavra:
 			if l.upper() == l and re.match("[A-Za-z]", l) and not p[Braille.CAPS] and not ignorar_caps:
 				letras.append([None] + Braille.MEC2002[Braille.MAIUSCULA])
-			letras.append([l.lower()] + Braille.MEC2002[l.lower()])
+			try:
+				ll = Braille.MEC2002[l.lower()]
+				letras.append([l.lower()] + ll)
+			except:
+				pass
 		p['letras'] = letras
 		p['última'] = p['letras'][-1][0] == '.'
 		return p

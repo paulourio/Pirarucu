@@ -2,11 +2,13 @@
 import threading
 import time
 import serial
+from PyQt4 import QtCore
 from tradutor import Tradutor
 
-class ReaderThread(threading.Thread):
+class ReaderThread(QtCore.QThread):
 	def __init__(self, texto, config):
-		threading.Thread.__init__(self)
+		QtCore.QThread.__init__(self)
+		#threading.Thread.__init__(self)
 		self.config = config
 		self.texto = texto
 		self.lista = texto.split()
@@ -23,7 +25,7 @@ class ReaderThread(threading.Thread):
 		for palavra in palavras:
 			for letra in palavra['letras']:
 				self.braille += letra[1]
-			self.braille += ' '
+			self.braille += '⠀'
 	
 	def AtualizarTexto(self, indice):
 		novo = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
@@ -37,12 +39,23 @@ class ReaderThread(threading.Thread):
 		self.config.AtualizarDestaqueTexto(novo)
 		
 	def AtualizarBraille(self, indice):
+		antes = self.braille[:indice]
+		depois = self.braille[indice + 1:]
+		if len(self.braille) > 38:
+			ia = indice - 18
+			if ia < 0:
+				ia = 0
+			antes = self.braille[ia:indice]
+			id = indice + 18
+			if indice < 18:
+				id += abs(indice - 18)
+			depois = self.braille[indice + 1:id]
 		novo = '<html><head/><body>'#<span style=" font-size:16pt; color:#000000;">⠁ ⠉⠑⠓⠑</span></p></body></html>
-		novo += self.braille[:indice]
+		novo += antes
 		novo += '<span style="font-size:16pt; color:#0000c0;">' 
 		novo += self.braille[indice] + '</span>'
-		novo += self.braille[indice + 1:]
-		self.config.lbBraille.setText(novo)		
+		novo += depois
+		self.config.AtualizarTextoBraille(novo)		
 		
 	def stop(self):
 		self.ativo = False
@@ -52,19 +65,30 @@ class ReaderThread(threading.Thread):
 		self.MontarBraille(self.tr.data['palavras'])
 		indice_total = 0
 		for ip, palavra in enumerate( self.tr.data['palavras'] ):
-			#self.AtualizarTexto(ip)
+			self.AtualizarTexto(ip)
 			lp = len(palavra['letras'])
 			for i, letra in enumerate(palavra['letras']):
-				self.EnviarLetra(letra[2])
 				print(letra)
-				self.AtualizarBraille(indice_total)
-				indice_total += 1
-				if i + 1 < lp:
-					proxima = palavra['letras'][i+1]
+				if type(letra[2]) is list:
+					for l in letra[2]:
+						self.EnviarLetra(l)
+						self.AtualizarBraille(indice_total)
+						indice_total += 1
+						if i + 1 < lp:
+							proxima = palavra['letras'][i+1]
+						else:
+							proxima = [None, None, None, '']
+						time.sleep(self.config.tempo_celula / 50)						
 				else:
-					proxima = [None, None, None, '']
-				self.config.AtualizarLeds(letra, proxima)
-				time.sleep(self.config.tempo_celula / 50)
+					self.EnviarLetra(letra[2])
+					self.AtualizarBraille(indice_total)
+					indice_total += 1
+					if i + 1 < lp:
+						proxima = palavra['letras'][i+1]
+					else:
+						proxima = [None, None, None, '']
+					self.config.AtualizarLeds(letra, proxima)
+					time.sleep(self.config.tempo_celula / 50)
 				if not self.ativo:
 					self.com.close()
 					return
