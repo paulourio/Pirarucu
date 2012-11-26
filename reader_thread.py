@@ -13,7 +13,11 @@ class ReaderThread(QtCore.QThread):
 		self.texto = texto
 		self.lista = texto.split()
 		self.tr = Tradutor(texto)
-		self.com = serial.Serial('/dev/ttyUSB1', 19200, timeout=1)
+		self.porta = '/dev/ttyUSB1'
+		try:
+			self.com = serial.Serial(self.porta, 19200, timeout=1)
+		except serial.SerialException:
+			self.config.statusBar.emit(QtCore.SIGNAL('update(QString)'), 'Não foi possível abrir a porta ' + self.porta)
 		#com.read(10)
 	
 	def EnviarLetra(self, letra):
@@ -61,6 +65,9 @@ class ReaderThread(QtCore.QThread):
 		self.ativo = False
 		
 	def run(self):
+		if not hasattr(self, 'com'):
+			print('Leitura abortada: não foi possível abrir a porta ' + self.porta)
+			return		
 		self.ativo = True
 		self.MontarBraille(self.tr.data['palavras'])
 		indice_total = 0
